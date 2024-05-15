@@ -1,0 +1,82 @@
+menu "Web Terminal"
+
+    config WEBTERM_MDNS_HOST_NAME
+        string "mDNS Host Name"
+        default "webterm"
+        help
+            Specify the domain name used in the mDNS service.
+            Note that webpage also take it as a part of URL where it will send GET/POST requests to.
+
+
+    choice WEBTERM_WEB_DEPLOY_MODE
+        prompt "Website deploy mode"
+        default WEBTERM_WEB_DEPLOY_SF
+        help
+            Select website deploy mode.
+            You can deploy website to SD card or SPI flash, and ESP32 will retrieve them via SDIO/SPI interface.
+            Detailed operation steps are listed in the example README file.
+        config WEBTERM_WEB_DEPLOY_SD
+            depends on IDF_TARGET_ESP32
+            bool "Deploy website to SD card"
+            help
+                Deploy website to SD card.
+                Choose this production mode if the size of website is too large (bigger than 2MB).
+        config WEBTERM_WEB_DEPLOY_SF
+            bool "Deploy website to SPI Nor Flash"
+            help
+                Deploy website to SPI Nor Flash.
+                Choose this production mode if the size of website is small (less than 2MB).
+    endchoice
+
+
+    config WEBTERM_WEB_SRC_DIR
+        string "Web source directory name"
+        default "frontend"
+        help
+            Specify the directory name of the frontend source
+
+
+    config WEBTERM_WIFI_SSID
+        depends on !WEBTERM_WIFI_SSID_PWD_FROM_STDIN
+        string "WiFi SSID"
+        default "myssid"
+        help
+            SSID (network name) for the example to connect to.
+
+
+    config WEBTERM_WIFI_PASSWORD
+        depends on !WEBTERM_WIFI_SSID_PWD_FROM_STDIN
+        string "WiFi Password"
+        default "mypassword"
+        help
+            WiFi password (WPA or WPA2) for the example to use.
+            Can be left blank if the network has no security set.
+
+
+    choice WEBTERM_WIFI_SCAN_AUTH_MODE_THRESHOLD
+        prompt "WiFi Scan auth mode threshold"
+        default WEBTERM_WIFI_AUTH_WPA_WPA2_PSK
+        help
+            The weakest authmode to accept in the scan mode.
+
+        config WEBTERM_WIFI_AUTH_OPEN
+            bool "OPEN"
+        config WEBTERM_WIFI_AUTH_WEP
+            bool "WEP"
+        config WEBTERM_WIFI_AUTH_WPA_PSK
+            bool "WPA PSK"
+        config WEBTERM_WIFI_AUTH_WPA2_PSK
+            bool "WPA2 PSK"
+        config WEBTERM_WIFI_AUTH_WPA_WPA2_PSK
+            bool "WPA WPA2 PSK"
+        config WEBTERM_WIFI_AUTH_WPA2_ENTERPRISE
+            bool "WPA2 ENTERPRISE"
+        config WEBTERM_WIFI_AUTH_WPA3_PSK
+            bool "WPA3 PSK"
+        config WEBTERM_WIFI_AUTH_WPA2_WPA3_PSK
+            bool "WPA2 WPA3 PSK"
+        config WEBTERM_WIFI_AUTH_WAPI_PSK
+            bool "WAPI PSK"
+    endchoice
+
+endmenu
